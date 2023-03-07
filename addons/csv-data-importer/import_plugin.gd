@@ -1,40 +1,42 @@
-tool
+@tool
 extends EditorImportPlugin
 
 enum Presets { CSV, CSV_HEADER, TSV, TSV_HEADER }
 enum Delimiters { COMMA, TAB }
 
 
-func get_importer_name():
+func _get_importer_name():
 	return "com.timothyqiu.godot-csv-importer"
 
 
-func get_visible_name():
+func _get_visible_name():
 	return "CSV Data"
 
 
-func get_priority():
+func _get_priority():
 	# The built-in Translation importer needs a restart to switch to other importer
 	return 0.75
 
+func _get_import_order():
+	return 0
 
-func get_recognized_extensions():
+func _get_recognized_extensions():
 	return ["csv", "tsv"]
 
 
-func get_save_extension():
+func _get_save_extension():
 	return "res"
 
 
-func get_resource_type():
+func _get_resource_type():
 	return "Resource"
 
 
-func get_preset_count():
+func _get_preset_count():
 	return Presets.size()
 
 
-func get_preset_name(preset):
+func _get_preset_name(preset):
 	match preset:
 		Presets.CSV:
 			return "CSV"
@@ -48,7 +50,7 @@ func get_preset_name(preset):
 			return "Unknown"
 
 
-func get_import_options(preset):
+func _get_import_options(_path, preset):
 	var delimiter = Delimiters.COMMA
 	var headers = false
 	match preset:
@@ -59,7 +61,7 @@ func get_import_options(preset):
 		Presets.TSV_HEADER:
 			delimiter = Delimiters.TAB
 			headers = true
-	
+
 	return [
 		{name="delimiter", default_value=delimiter, property_hint=PROPERTY_HINT_ENUM, hint_string="Comma,Tab"},
 		{name="headers", default_value=headers},
@@ -68,27 +70,26 @@ func get_import_options(preset):
 	]
 
 
-func get_option_visibility(option, options):
-	return true  # Godot does not update the visibility immediately
+func _get_option_visibility(_path, option, options):
+	return true	# Godot does not update the visibility immediately
 	if option == "force_float":
 		return options.detect_numbers
 	return true
 
 
-func import(source_file, save_path, options, platform_variants, gen_files):
+func _import(source_file, save_path, options, platform_variants, gen_files):
 	var delim: String
 	match options.delimiter:
 		Delimiters.COMMA:
 			delim = ","
 		Delimiters.TAB:
 			delim = "\t"
-	
-	var file := File.new()
-	var err := file.open(source_file, File.READ)
-	if err != OK:
-		printerr("Failed to open file: ", err)
+
+	var file = FileAccess.open(source_file, FileAccess.READ)
+	if !file.is_open():
+		printerr("Failed to open file: ", source_file)
 		return FAILED
-	
+
 	var lines = []
 	while not file.eof_reached():
 		var line = file.get_csv_line(delim)
@@ -105,18 +106,18 @@ func import(source_file, save_path, options, platform_variants, gen_files):
 		else:
 			lines.append(line)
 	file.close()
-	
+
 	# Remove trailing empty line
-	if not lines.empty() and lines.back().size() == 1 and lines.back()[0] == "":
+	if not lines.is_empty() and lines.back().size() == 1 and lines.back()[0] == "":
 		lines.pop_back()
 
 	var data = preload("csv_data.gd").new()
-	
+
 	if options.headers:
-		if lines.empty():
+		if lines.is_empty():
 			printerr("Can't find header in empty file")
 			return ERR_PARSE_ERROR
-		
+
 		var headers = lines[0]
 		for i in range(1, lines.size()):
 			var fields = lines[i]
@@ -131,9 +132,9 @@ func import(source_file, save_path, options, platform_variants, gen_files):
 			data.records.append(dict)
 	else:
 		data.records = lines
-	
-	var filename = save_path + "." + get_save_extension()
-	err = ResourceSaver.save(filename, data)
+
+	var filename = save_path + "." + _get_save_extension()
+	var err = ResourceSaver.save(data, filename)
 	if err != OK:
 		printerr("Failed to save resource: ", err)
 	return err
