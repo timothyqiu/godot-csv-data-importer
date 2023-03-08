@@ -1,0 +1,17 @@
+[remap]
+
+importer="com.timothyqiu.godot-csv-importer"
+type="Resource"
+path="res://.import/csv.csv-a54d80b149df6f2fa52097ee2038df67.res"
+
+[deps]
+
+source_file="res://examples/csv.csv"
+dest_files=[ "res://.import/csv.csv-a54d80b149df6f2fa52097ee2038df67.res" ]
+
+[params]
+
+delimiter=0
+headers=false
+detect_numbers=false
+force_float=true
