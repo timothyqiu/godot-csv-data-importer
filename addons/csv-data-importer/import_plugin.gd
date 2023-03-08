@@ -96,7 +96,7 @@ func _import(source_file, save_path, options, platform_variants, gen_files):
 		if options.detect_numbers and (not options.headers or lines.size() > 0):
 			var detected := []
 			for field in line:
-				if not options.force_float and field.is_valid_integer():
+				if not options.force_float and field.is_valid_int():
 					detected.append(int(field))
 				elif field.is_valid_float():
 					detected.append(float(field))
