@@ -6,6 +6,7 @@
 /.gitignore         export-ignore
 /LICENSE            export-ignore
 /README.md          export-ignore
+/README-zh_CN.md    export-ignore
 /project.godot      export-ignore
 /icon.png           export-ignore
 /icon.png.import    export-ignore
