@@ -86,7 +86,7 @@ func _import(source_file, save_path, options, platform_variants, gen_files):
 			delim = "\t"
 
 	var file = FileAccess.open(source_file, FileAccess.READ)
-	if !file.is_open():
+	if not file:
 		printerr("Failed to open file: ", source_file)
 		return FAILED
 
