@@ -15,7 +15,7 @@ func _get_visible_name():
 
 func _get_priority():
 	# The built-in Translation importer needs a restart to switch to other importer
-	return 0.75
+	return 2.0
 
 func _get_import_order():
 	return 0
