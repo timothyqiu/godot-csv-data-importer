@@ -53,7 +53,7 @@ The value of `preload("res://example.csv").records` will be:
 ```gdscript
 # By default
 [
-	["Apple", "Banana", "Cherry", "Durian", "Feijoa", "Eggplant"],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
 	["-12", "13", "14.0", "20.5", "TRUE", "False"],
 ]
 
@@ -64,26 +64,26 @@ The value of `preload("res://example.csv").records` will be:
 		"Banana": "13",
 		"Cherry": "14.0",
 		"Durian": "20.5",
-		"Feijoa": "TRUE",
-		"Eggplant": "False,
+		"Eggplant": "TRUE",
+		"Feijoa": "False",
 	},
 ]
 
 # With "Detect Numbers" and "Force Float" enabled
 [
-	["Apple", "Banana", "Cherry", "Durian", "Feijoa", "Eggplant"],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
 	[-12.0, 13.0, 14.0, 20.5, "TRUE", "False"],
 ]
 
 # With Detect Booleans enabled
 [
-	["Apple", "Banana", "Cherry", "Durian", "Feijoa", "Eggplant"],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
 	["-12", "13", "14.0", "20.5", true, false],
 ]
 
 # With "Detect Numbers" enabled, "Detect Booleans" enabled and "Force Float" disabled
 [
-	["Apple", "Banana", "Cherry", "Durian", "Feijoa", "Eggplant"],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
 	[
 		-12,   # int
 		13,    # int
