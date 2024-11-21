@@ -97,21 +97,19 @@ func _import(source_file, save_path, options, platform_variants, gen_files):
 		if not options.headers or lines.size() > 0:
 			var detected := []
 			for field in line:
-				if options.detect_numbers and field.is_valid_float(): # Any valid integer is also a valid float
+				if options.detect_numbers and field.is_valid_float():
 					if not options.force_float and field.is_valid_int():
 						detected.append(int(field))
 						continue
-					elif field.is_valid_float():
-						detected.append(float(field))
-						continue
+					detected.append(float(field))
+					continue
 				if options.detect_booleans:
 					if field.nocasecmp_to("false") == 0: 
-						detected.append(bool(false))
+						detected.append(false)
 						continue
-					elif field.nocasecmp_to("true") == 0:
-						detected.append(bool(true))
+					if field.nocasecmp_to("true") == 0:
+						detected.append(true)
 						continue
-
 				detected.append(field)
 			lines.append(detected)
 		else:
