@@ -67,6 +67,7 @@ func _get_import_options(_path, preset):
 		{name="headers", default_value=headers},
 		{name="detect_numbers", default_value=false},
 		{name="force_float", default_value=true},
+		{name="detect_booleans", default_value=false},
 	]
 
 
@@ -93,15 +94,23 @@ func _import(source_file, save_path, options, platform_variants, gen_files):
 	var lines = []
 	while not file.eof_reached():
 		var line = file.get_csv_line(delim)
-		if options.detect_numbers and (not options.headers or lines.size() > 0):
+		if not options.headers or lines.size() > 0:
 			var detected := []
 			for field in line:
-				if not options.force_float and field.is_valid_int():
-					detected.append(int(field))
-				elif field.is_valid_float():
+				if options.detect_numbers and field.is_valid_float():
+					if not options.force_float and field.is_valid_int():
+						detected.append(int(field))
+						continue
 					detected.append(float(field))
-				else:
-					detected.append(field)
+					continue
+				if options.detect_booleans:
+					if field.nocasecmp_to("false") == 0:
+						detected.append(false)
+						continue
+					if field.nocasecmp_to("true") == 0:
+						detected.append(true)
+						continue
+				detected.append(field)
 			lines.append(detected)
 		else:
 			lines.append(line)

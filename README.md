@@ -36,14 +36,16 @@ an array of string arrays by default.
 	* Convert fields from string to `int` or `float` when possible.
 * **Force Float**
 	* Always use `float` when detecting numbers.
+* **Detect Booleans**
+	* Convert fields from string to `false` or `true` when case-insetively detecting according strings.
 
 ## Example
 
 After importing `res://example.csv`:
 
 ```csv
-Apple,Banana,Cherry,Durian
--12,13,14.0,20.5
+Apple,Banana,Cherry,Durian,Feijoa,Eggplant
+-12,13,14.0,20.5,TRUE,False
 ```
 
 The value of `preload("res://example.csv").records` will be:
@@ -51,8 +53,8 @@ The value of `preload("res://example.csv").records` will be:
 ```gdscript
 # By default
 [
-	["Apple", "Banana", "Cherry", "Durian"],
-	["-12", "13", "14.0", "20.5"],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
+	["-12", "13", "14.0", "20.5", "TRUE", "False"],
 ]
 
 # With "Headers" enabled
@@ -62,22 +64,33 @@ The value of `preload("res://example.csv").records` will be:
 		"Banana": "13",
 		"Cherry": "14.0",
 		"Durian": "20.5",
+		"Eggplant": "TRUE",
+		"Feijoa": "False",
 	},
 ]
 
 # With "Detect Numbers" and "Force Float" enabled
 [
-	["Apple", "Banana", "Cherry", "Durian"],
-	[-12.0, 13.0, 14.0, 20.5],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
+	[-12.0, 13.0, 14.0, 20.5, "TRUE", "False"],
+]
 
-# With "Detect Numbers" enabled and "Force Float" disabled
+# With Detect Booleans enabled
 [
-	["Apple", "Banana", "Cherry", "Durian"],
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
+	["-12", "13", "14.0", "20.5", true, false],
+]
+
+# With "Detect Numbers" enabled, "Detect Booleans" enabled and "Force Float" disabled
+[
+	["Apple", "Banana", "Cherry", "Durian", "Eggplant", "Feijoa"],
 	[
 		-12,   # int
 		13,    # int
 		14.0,  # float
 		20.5,  # float
+		true,  # bool
+		false, # bool
 	],
 ]
 ```
