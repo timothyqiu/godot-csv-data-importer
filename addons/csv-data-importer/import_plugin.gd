@@ -104,7 +104,7 @@ func _import(source_file, save_path, options, platform_variants, gen_files):
 					detected.append(float(field))
 					continue
 				if options.detect_booleans:
-					if field.nocasecmp_to("false") == 0: 
+					if field.nocasecmp_to("false") == 0:
 						detected.append(false)
 						continue
 					if field.nocasecmp_to("true") == 0:
