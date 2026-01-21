@@ -65,6 +65,8 @@ func _get_import_options(_path, preset):
 	return [
 		{name="delimiter", default_value=delimiter, property_hint=PROPERTY_HINT_ENUM, hint_string="Comma,Tab,Semicolon"},
 		{name="headers", default_value=headers},
+		{name="headers_line", default_value=0},
+		{name="start_line", default_value=1},
 		{name="detect_numbers", default_value=false},
 		{name="force_float", default_value=true},
 		{name="detect_booleans", default_value=false},
@@ -129,8 +131,8 @@ func _import(source_file, save_path, options, platform_variants, gen_files):
 			printerr("Can't find header in empty file")
 			return ERR_PARSE_ERROR
 
-		var headers = lines[0]
-		for i in range(1, lines.size()):
+		var headers = lines[options.headers_line]
+		for i in range(options.start_line, lines.size()):
 			var fields = lines[i]
 			if fields.size() > headers.size():
 				printerr("Line %d has more fields than headers" % i)
